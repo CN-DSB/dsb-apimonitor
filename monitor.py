@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#chmod +x monitor.py
+
 import frida
 import sys
 import os
@@ -62,6 +65,10 @@ excludes = []
 classes = []
 
 def main():
+    if len(sys.argv) == 1:
+        help()
+        return
+
     try:
         options,args = getopt.getopt(sys.argv[1:],"hp:c:e:t:Up:p:n:", ["help", "class", "exclude", "type", "usb", "pid", "name"])
     except getopt.GetoptError:
