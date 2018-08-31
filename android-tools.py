@@ -6,14 +6,14 @@ import getopt
 import sys
 
 def help():
-    print("-h --help\n-l --list\n-g --get packagename\n-m --manifest xxx.apk\n-c --current\n-H --hang package/activity\n-s --server\n");
+    print("-h --help\n-l --list\n-g --get packagename\n-m --manifest xxx.apk\n-c --current\n-H --hang package/activity\n-C --continue\n-s --server\n");
 
 def main():
     if len(sys.argv) == 1:
         help()
         return
     try:
-        options,args = getopt.getopt(sys.argv[1:],"hp:lp:g:m:cp:s:H:", ["help", "list", "get", "manifest","current","server","hang"])
+        options,args = getopt.getopt(sys.argv[1:],"hp:lp:g:m:cp:s:H:Cp:", ["help", "list", "get", "manifest","current","server","hang","continue"])
     except getopt.GetoptError:
         help()
         sys.exit()
@@ -49,8 +49,8 @@ def main():
             #print(cmd)
             os.popen(cmd).read()
             print("debug port 8800")
-            
-
+        if name in ("-C","--current"):
+            os.system("jdb -attach 8800")
         if name in ("-s","--server"):
             fridaServer=os.path.basename(value)
             cmd = "adb shell ls /data/local/tmp/" + fridaServer + " |grep 'No such file'|wc -l"

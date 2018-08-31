@@ -13,3 +13,4 @@
 ./android-tools.py -c 查看当前的Activity
 ./android-tools.py -H package/activity 启动apk并等待调试
 ./android-tools.py -s frida-server 启动frida-server
+./android-tools.py -C 启动hang住的程序
