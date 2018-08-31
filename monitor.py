@@ -56,10 +56,10 @@ def start_app(apkFile, packageName, launcherActivity):
     ret = subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 def help():
-    print("-h --help\n-c --class xxx\n-e --exclude api\n-t --type android,ios,linux,windows,mac\n-U --usb target is usb device\n-p --pid pid\n-n --name process name\n")
+    print("-h --help\n-d --directory script's path\n-e --exclude api\n-U --usb target is usb device\n-p --pid pid\n-n --name process name\n")
 
 def error():
-    print("error: -t, -p or -n must be specified\n")
+    print("error: -d, -p or -n must be specified\n")
 
 excludes = []
 classes = []
@@ -70,42 +70,32 @@ def main():
         return
 
     try:
-        options,args = getopt.getopt(sys.argv[1:],"hp:c:e:t:Up:p:n:", ["help", "class", "exclude", "type", "usb", "pid", "name"])
+        options,args = getopt.getopt(sys.argv[1:],"hp:d:e:Up:p:n:", ["help", "directory", "exclude", "usb", "pid", "name"])
     except getopt.GetoptError:
         help()
         sys.exit()
 
-    targes=["android","ios","linux","windows","mac"]
-    mobiles=["android","ios"]
     global excludes
-    global classes
-    devtype=""
+    scriptDir=""
     pid = ""
     pname = ""
+    usbdev=False
     for name,value in options:
         if name in ("-h","--help"):
             help()
-        if name in ("-t","--type"):
-            devtype = value
+        if name in ("-d","--type"):
+            scriptDir = value
         if name in ("-U","--usb"):
-            continue
+            usbdev=True
         if name in ("-p","--pid"):
             pid=value
         if name in ("-n","--name"):
             pname=value
         if name in ("-e","--exclude"):
             excludes.append(value + ".js")
-        if name in ("-c","--class"):
-            classes.append(value)
 
-    if len(devtype) == 0:
+    if len(scriptDir) == 0:
         error()
-        return
-
-    if devtype in targes:
-        print(devtype)
-    else:
-        print("error: -t " + str(targes));
         return
 
     if len(pid) == 0 and len(pname) == 0:
@@ -120,7 +110,7 @@ def main():
 
     session = None
     try:
-        if devtype in mobiles:
+        if usbdev == True:
             session = frida.get_usb_device().attach(tid)
         else:
             session = frida.attach(tid)
@@ -128,10 +118,7 @@ def main():
         print("[ERROR]: %s" % str(e))
         sys.exit(1)
     print("successfully attached to app")
-    if len(classes) == 0:
-        script_dir = os.path.join(".", "scripts/" + devtype)
-    else:
-        script_dir = os.path.join(".", "scripts/" + devtype + "/" + classes[0])
+    script_dir = os.path.join(".", scriptDir)
     script_content = build_monitor_script(script_dir)
     script = session.create_script(script_content)  
     script.on("message", on_message)

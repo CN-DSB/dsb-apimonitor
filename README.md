@@ -10,3 +10,6 @@
 ./android-tools.py -l 获取已安装程序列表
 ./android-tools.py -g com.android.bluetooth 从手机中下载apk
 ./android-tools.py -m ./Bluetooth.apk  查看AndroidManifest.xml
+./android-tools.py -c 查看当前的Activity
+./android-tools.py -H package/activity 启动apk并等待调试
+./android-tools.py -s frida-server 启动frida-server
