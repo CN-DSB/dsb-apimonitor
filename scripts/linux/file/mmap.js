@@ -1,6 +1,6 @@
 Interceptor.attach(Module.findExportByName(null , "mmap"), {
     onEnter: function(args) {
-    log("mmap(" +
+    send("mmap(" +
       "addr=" + args[0] +
       ", length=" + args[1] +
       ", prot=" + args[2] +

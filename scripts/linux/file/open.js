@@ -7,6 +7,6 @@ Interceptor.attach(Module.findExportByName(null , "open"), {
     ")");
     },
     onLeave:function(retval){
-    
+   	send("open retval=" + retval); 
     }
 });
