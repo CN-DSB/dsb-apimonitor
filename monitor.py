@@ -125,9 +125,9 @@ def main():
     script.load()
 
     #prevent the python script from terminating
-    start = time.clock()
+    start = time.process_time()
     while True:
-        end = time.clock()
+        end = time.process_time()
         if int(end - start) > 300:
             session.detach()
             break
