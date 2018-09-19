@@ -1,5 +1,4 @@
 Interceptor.attach(Module.findExportByName(null , "open"), {
-    pathname:"",
     onEnter: function(args) {
         send("open pathname=\"" +
 	Memory.readUtf8String(args[0]) +
