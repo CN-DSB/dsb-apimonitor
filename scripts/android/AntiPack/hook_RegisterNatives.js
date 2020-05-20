@@ -80,7 +80,8 @@ function hook_libart() {
                 var mid_getName = funcGetMethodID(env, cls, Memory.allocUtf8String("getName"), Memory.allocUtf8String("()Ljava/lang/String;"));
                 var name_jstring = funcCallObjectMethod(env, clz_obj2, mid_getName);
                 var name_pchar = funcGetStringUTFChars(env, name_jstring, ptr(0));
-                var class_name = ptr(name_pchar).readCString();
+                //var class_name = ptr(name_pchar).readCString();
+                var class_name = name_pchar;
                 funcReleaseStringUTFChars(env, name_jstring, name_pchar);
 
                 //console.log(class_name);
@@ -96,12 +97,77 @@ function hook_libart() {
                     var name = Memory.readCString(name_ptr);
                     var sig = Memory.readCString(sig_ptr);
                     var find_module = Process.findModuleByAddress(fnPtr_ptr);
-                    #console.log("[RegisterNatives] java_class:", class_name, "name:", name, "sig:", sig, "fnPtr:", fnPtr_ptr, "module_name:", find_module.name, "module_base:", find_module.base, "offset:", ptr(fnPtr_ptr).sub(find_module.base));
-                    send("[RegisterNatives] java_class:", class_name, "name:", name, "sig:", sig, "fnPtr:", fnPtr_ptr, "module_name:", find_module.name, "module_base:", find_module.base, "offset:", ptr(fnPtr_ptr).sub(find_module.base));
+                    console.log("[RegisterNatives] java_class:", class_name, "name:", name, "sig:", sig, "fnPtr:", fnPtr_ptr, "module_name:", find_module.name, "module_base:", find_module.base, "offset:", ptr(fnPtr_ptr).sub(find_module.base));
                 }
             },
             onLeave: function (retval) { }
         });
+    }
+    
+    if (addrFindClass != null) {
+        Interceptor.attach(addrFindClass, {
+            onEnter: function (args) {
+                var env = args[0];
+                var name = args[1];
+                this.jname = Memory.readCString(name);
+            },
+            onLeave:function(retval){
+                send("FindClass name=" + this.jname + " retval=" + retval); 
+            }
+        }
+        );
+    }
+    
+        if (addrGetMethodID != null) {
+        Interceptor.attach(addrGetMethodID, {
+            onEnter: function (args) {
+                var env = args[0];
+                var clazz = args[1];
+                var name = args[2];
+                var sig = args[3];
+                send("GetMethodID clazz=" + clazz + " name=" + Memory.readCString(name) + " sig=" + Memory.readCString(sig));
+            }
+        }
+        );
+    }
+    
+        if (addrGetStaticMethodID != null) {
+        Interceptor.attach(addrGetStaticMethodID, {
+            onEnter: function (args) {
+                var env = args[0];
+                var clazz = args[1];
+                var name = args[2];
+                var sig = args[3];
+                send("GetStaticMethodID clazz=" + clazz + " name=" + Memory.readCString(name) + " sig=" + Memory.readCString(sig));
+            }
+        }
+        );
+    }
+    
+        if (addrGetFieldID != null) {
+        Interceptor.attach(addrGetFieldID, {
+            onEnter: function (args) {
+                var env = args[0];
+                var clazz = args[1];
+                var name = args[2];
+                var sig = args[3];
+                send("GetFieldID clazz=" + clazz + " name=" + Memory.readCString(name) + " sig=" + Memory.readCString(sig));
+            }
+        }
+        );
+    }
+    
+        if (addrGetStaticFieldID != null) {
+        Interceptor.attach(addrGetStaticFieldID, {
+            onEnter: function (args) {
+                var env = args[0];
+                var clazz = args[1];
+                var name = args[2];
+                var sig = args[3];
+                send("GetStaticFieldID clazz=" + clazz + " name=" + Memory.readCString(name) + " sig=" + Memory.readCString(sig));
+            }
+        }
+        );
     }
 
     ishook_libart = true;
