@@ -6,14 +6,14 @@ import getopt
 import sys
 
 def help():
-    print("-h --help\n-l --list\n-g --get packagename\n-m --manifest xxx.apk\n-c --current\n-H --hang package/activity\n-C --continue\n-s --server\n");
+    print("-h --help\n-l --list\n-g --get packagename\n-m --manifest xxx.apk\n-c --current\n-H --hang package/activity\n-C --continue\n-s --server\n-p --p2p HostPort:ProcessPort, example 23946:23946");
 
 def main():
     if len(sys.argv) == 1:
         help()
         return
     try:
-        options,args = getopt.getopt(sys.argv[1:],"hp:lp:g:m:cp:s:H:Cp:", ["help", "list", "get", "manifest","current","server","hang","continue"])
+        options,args = getopt.getopt(sys.argv[1:],"hp:lp:g:m:cp:s:H:Cp:pp", ["help", "list", "get", "manifest","current","server","hang","continue", "p2p"])
     except getopt.GetoptError:
         help()
         sys.exit()
@@ -46,7 +46,7 @@ def main():
             #print(cmd)
             pid=os.popen(cmd).read()
             cmd="adb forward tcp:8800 jdwp:" + pid
-            #print(cmd)
+            print(cmd)
             os.popen(cmd).read()
             print("debug port 8800")
         if name in ("-C","--current"):
@@ -64,6 +64,11 @@ def main():
             os.popen("adb root").read()
             os.popen("adb shell chmod +x /data/local/tmp/" + fridaServer).read()
             cmd="adb shell \"/data/local/tmp/" + fridaServer + " &\""
+            print(cmd)
+            os.system(cmd)
+        if name in ("-p", "--p2p"):
+            pp=value.split(":")
+            cmd = "adb forward tcp:"+pp[0]+" tcp:"+pp[1]
             print(cmd)
             os.system(cmd)
 
