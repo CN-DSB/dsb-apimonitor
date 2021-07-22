@@ -6,14 +6,14 @@ import getopt
 import sys
 
 def help():
-    print("-h --help\n-l --list\n-g --get packagename\n-m --manifest xxx.apk\n-c --current\n-H --hang package/activity\n-C --continue\n-s --server\n-p --p2p HostPort:ProcessPort, example 23946:23946\n-S --sign xxx.apk");
+    print("-h --help\n-l --list\n-g --get packagename\n-m --manifest xxx.apk\n-c --current\n-H --hang package/activity\n-C --continue\n-s --server\n-p --p2p HostPort:ProcessPort, example 23946:23946\n-S --sign xxx.apk\n-u --user show all user\n");
 
 def main():
     if len(sys.argv) == 1:
         help()
         return
     try:
-        options,args = getopt.getopt(sys.argv[1:],"hp:lp:g:m:cp:s:H:Cp:pp:S:", ["help", "list", "get", "manifest","current","server","hang","continue", "p2p","sign"])
+        options,args = getopt.getopt(sys.argv[1:],"hp:up:lp:g:m:cp:s:H:Cp:pp:S:", ["help", "user", "list", "get", "manifest","current","server","hang","continue", "p2p","sign"])
     except getopt.GetoptError:
         help()
         sys.exit()
@@ -74,6 +74,10 @@ def main():
         if name in ("-S", "--sign"):
             cmd = 'keytool -printcert -jarfile ' + value
             os.system(cmd)
+        if name in ("-u", "--user"):
+            str=os.popen("adb shell pm list users").read()
+            print(str)
+            
             
 
 if __name__ == "__main__":
