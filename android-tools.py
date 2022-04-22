@@ -30,7 +30,7 @@ def main():
             pname=str.split(':')[1];
             os.system("adb pull " + pname)
         if name in ("-c","--current"):
-            os.system("adb shell dumpsys activity |grep Run")
+            os.system("adb shell dumpsys activity |grep topActivity")
         if name in ("-m","--manifest"):
             cmd="unzip -d .tmp " + value
             os.popen(cmd).read()

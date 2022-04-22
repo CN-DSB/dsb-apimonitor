@@ -1,6 +1,6 @@
 # apimonitor
 
-注意：使用tail -f log.t， 等待日志输出停止后再观察，不然容易导致日志缺失。
+注意：使用tail -f log.txt， 等待日志输出停止后再观察，不然容易导致日志缺失。
 
 修改https://github.com/uniking/AppMonitor，用来观察linux，android应用的调用逻辑
 
@@ -18,3 +18,4 @@
 ./android-tools.py -C 启动hang住的程序
 
 AndroidManifest.xml中搜索android.intent.category.LAUNCHER可找到主Activity
+java -jar tools/AXMLPrinter2.jar tmp/AndroidManifest.xml |grep -B 15 android.intent.category.LAUNCHER

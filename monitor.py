@@ -56,6 +56,7 @@ def start_app(apkFile, packageName, launcherActivity):
     ret = subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 def help():
+    print("copy frida-server version =", os.popen("frida --version").read())
     print("-h --help\n-d --directory script's path\n-e --exclude api\n-U --usb target is usb device\n-p --pid pid\n-n --name process name\n")
 
 def error():
