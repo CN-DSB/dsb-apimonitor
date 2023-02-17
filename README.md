@@ -1,5 +1,14 @@
 # apimonitor
 
+archlinux使用fridaUiTools
+1, python kmainForm.py
+2, 上传自己frida版本的服务端到/data/local/tmp/下并启动
+3, cmd切换到adb shell su 0
+4, 执行-->修改默认端口-->端口设为空
+5, 执行-->附加当前应用
+
+
+
 注意：使用tail -f log.txt， 等待日志输出停止后再观察，不然容易导致日志缺失。
 
 修改https://github.com/uniking/AppMonitor，用来观察linux，android应用的调用逻辑
