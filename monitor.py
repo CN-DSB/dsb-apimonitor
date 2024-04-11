@@ -1,8 +1,10 @@
 #!/usr/bin/python
 #chmod +x monitor.py
 
-import frida
 import sys
+sys.path.append('/home/wzl/.local/share/pipx/venvs/frida-tools/lib/python3.11/site-packages')
+
+import frida
 import os
 import time
 import logging
