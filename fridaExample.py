@@ -1,3 +1,4 @@
+#archlinux install frida, pipx install frida-tools
 import sys
 sys.path.append('/home/wzl/.local/share/pipx/venvs/frida-tools/lib/python3.11/site-packages')
 
@@ -9,7 +10,7 @@ def on_message(message, data):
 
 def main():
     # 连接到目标进程
-    pid = int(1759)
+    pid = int(24020)
     #session = frida.attach("com.example.app")
     session = frida.get_usb_device().attach(pid)
 
@@ -18,7 +19,7 @@ def main():
         console.log("[*] Starting script");
 
         // 获取要 hook 的 libc 函数
-        var pFunc = Module.findExportByName("libandroid_runtime.so", "_ZN7android11AudioRecord4readEPvmb");
+        var pFunc = Module.findExportByName("libandroid_runtime.so", "_ZN7android10AudioTrack5writeEPKvmb");
         console.log("[*] Native function: " + pFunc);
 
         Interceptor.attach(pFunc, {
